@@ -1,0 +1,5 @@
+name: AlaurinFoodnStamina
+version: ${project.version}
+main: alaurinfoodnstamina.alaurinfoodnstamina.AlaurinFoodnStamina
+authors: [Laleem]
+description: Food and Stamina System

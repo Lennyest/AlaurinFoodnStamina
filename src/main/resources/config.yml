@@ -1,0 +1,19 @@
+#How many food levels a player gains from drinking a potion!
+#A full bar is 20.
+PotionFoodAmount: 5
+#In percentage! Example: 5 = 5% 20 = 20%
+FoodPercentage: 50
+#Message for when the player hits below the FoodPercentage! Use & to add colors, &c = red, &b = aqua
+YouNeedToEatMessage: "&cYou need to eat!"
+#Will the message show up above the hotbar?
+YouNeedToEatHotbar: true
+#Will the message show up in the chat?
+YouNeedToEatChat: false
+#Enable both if you want both, disabling both will cause issues.
+Slowness: true
+#In percentage when the player will crouch.
+AmountToCrouch: 30
+Consumables:
+  Potion: 25
+  Steak: 50
+  GrilledPorkchop: 50

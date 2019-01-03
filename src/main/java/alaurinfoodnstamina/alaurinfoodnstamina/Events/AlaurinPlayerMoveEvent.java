@@ -1,40 +1,58 @@
-/*
- * Copyright (c) 2018. Laleem/Lenny
- */
 
 package alaurinfoodnstamina.alaurinfoodnstamina.Events;
 
+import alaurinfoodnstamina.alaurinfoodnstamina.AlaurinFoodnStamina;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 public class AlaurinPlayerMoveEvent implements Listener {
 
-    public int percent(int currentValue, int maxValue) {
-        float percent = ((float) currentValue / maxValue) * 100;
-        return (int) percent;
-    }
+    //Made these final, do a test.
+    //Should be fine.
+    private final String YouNeedToEatChat = ChatColor.translateAlternateColorCodes('&', AlaurinFoodnStamina.configCFG.get("YouNeedToEatMessage").toString());
+    private final String YouNeedToEatBar = ChatColor.translateAlternateColorCodes('&', AlaurinFoodnStamina.configCFG.get("YouNeedToEatMessage").toString());
 
     @EventHandler
     public void playerCheckMove(PlayerMoveEvent event) {
+
         Player player = event.getPlayer();
-        /*
-        if ((int) AlaurinFoodnStamina.getInstance().getConfigCFG().get("FoodPercentage") <= percent(player.getFoodLevel(), 20)) {
-            if ((boolean) AlaurinFoodnStamina.getInstance().getConfigCFG().get("YouNeedToEatChat")) {
-                player.sendMessage(AlaurinFoodnStamina.getInstance().getConfigCFG().get("YouNeedToEatMessage").toString());
-            }
-            if ((boolean) AlaurinFoodnStamina.getInstance().getConfigCFG().get("YouNeedToEatHotbar")) {
-                player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
-                        new TextComponent( AlaurinFoodnStamina.getInstance().getConfigCFG().get("YouNeedToEatMessage").toString()));
-            }
+
+        if (player.getGameMode() == GameMode.CREATIVE || player.getGameMode() == GameMode.SPECTATOR) {
+            return;
         }
 
-        if ((int) AlaurinFoodnStamina.getInstance().getConfigCFG().get("AmountToCrouch")
-                <= percent(player.getFoodLevel(), 20) && (boolean) AlaurinFoodnStamina.getInstance().getConfigCFG().get("Slowness")) {
-            player.setSneaking(true);
+        if ((boolean) AlaurinFoodnStamina.configCFG.get("Slowness")) {
+            if (player.getFoodLevel() < (int) AlaurinFoodnStamina.configCFG.get("AmountToCrouch")) {
+
+                if ((boolean) AlaurinFoodnStamina.configCFG.get("YouNeedToEatHotbar")) {
+                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
+                            new TextComponent(YouNeedToEatBar));
+                } else if ((boolean) AlaurinFoodnStamina.configCFG.get("YouNeedToEatChat")) {
+                    player.sendMessage(YouNeedToEatChat);
+                }
+
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 2));
+                player.setSneaking(true);
+
+            } else if (player.getFoodLevel() > (int) AlaurinFoodnStamina.configCFG.get("AmountToCrouch")) {
+                if ((boolean) AlaurinFoodnStamina.configCFG.get("YouNeedToEatHotbar")) {
+                    //Remove the action bar instantly vvvv
+                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
+                            new TextComponent(""));
+                    player.removePotionEffect(PotionEffectType.SLOW);
+                    return;
+                }
+                player.removePotionEffect(PotionEffectType.SLOW);
+            }
+
         }
-        */
     }
-
 }

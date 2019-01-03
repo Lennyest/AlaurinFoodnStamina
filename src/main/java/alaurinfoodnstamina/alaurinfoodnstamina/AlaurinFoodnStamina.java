@@ -12,22 +12,11 @@ import java.io.IOException;
 
 public final class AlaurinFoodnStamina extends JavaPlugin {
 
+    public static File configFile;
+    public static FileConfiguration configCFG = new YamlConfiguration();
+    //Ususally don't use static here, bad habit.
+    //Make the instance
     private static AlaurinFoodnStamina instance;
-    public static AlaurinFoodnStamina getInstance() {
-        return instance;
-    }
-
-    public FileConfiguration getConfigCFG() {
-        return configCFG;
-    }
-
-    private File configFile;
-    private FileConfiguration configCFG = new YamlConfiguration();
-
-/*    public int amountToCrouch = (int) configCFG.get("AmountToCrouch");
-    public int percentage = (int) configCFG.get("FoodPercentage");*/
-
-
 
 
     @Override
@@ -39,24 +28,25 @@ public final class AlaurinFoodnStamina extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        //To avoid memory leaks. If you don't do this, make it a habit.
         instance = null;
     }
 
     private void createConfig() {
-        //Try, old was without the File.seperator
-        configFile = new File(getDataFolder() + File.separator + "config.yml");
         if (!getDataFolder().exists()) {
             getDataFolder().mkdir();
         }
 
+        configFile = new File(getDataFolder() + File.separator + "config.yml");
         if (!configFile.exists()) {
-            configFile.getParentFile().mkdirs();
-            saveResource("config.yml", true);
+            saveResource("config.yml", false);
         }
+
         configCFG = new YamlConfiguration();
+
         try {
             configCFG.load(configFile);
-        } catch (IOException | InvalidConfigurationException e) {
+        } catch (InvalidConfigurationException | IOException e) {
             e.printStackTrace();
         }
     }

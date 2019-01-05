@@ -4,6 +4,7 @@ package alaurinfoodnstamina.alaurinfoodnstamina.Events;
 import alaurinfoodnstamina.alaurinfoodnstamina.AlaurinFoodnStamina;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -29,6 +30,10 @@ public class AlaurinPlayerMoveEvent implements Listener {
             return;
         }
 
+        if (player.hasPermission("AlaurinFoodnStamina.BYPASS")) {
+            return;
+        }
+
         if ((boolean) AlaurinFoodnStamina.configCFG.get("Slowness")) {
             if (player.getFoodLevel() < (int) AlaurinFoodnStamina.configCFG.get("AmountToCrouch")) {
 
@@ -36,23 +41,24 @@ public class AlaurinPlayerMoveEvent implements Listener {
                     player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
                             new TextComponent(YouNeedToEatBar));
                 } else if ((boolean) AlaurinFoodnStamina.configCFG.get("YouNeedToEatChat")) {
-                    player.sendMessage(YouNeedToEatChat);
+                    Bukkit.getScheduler().scheduleSyncRepeatingTask(AlaurinFoodnStamina.getInstance(), () ->
+                            player.sendMessage(YouNeedToEatChat), 1440L, 1L);
                 }
 
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 2));
-                player.setSneaking(true);
 
             } else if (player.getFoodLevel() > (int) AlaurinFoodnStamina.configCFG.get("AmountToCrouch")) {
+
                 if ((boolean) AlaurinFoodnStamina.configCFG.get("YouNeedToEatHotbar")) {
                     //Remove the action bar instantly vvvv
                     player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
                             new TextComponent(""));
                     player.removePotionEffect(PotionEffectType.SLOW);
-                    return;
                 }
-                player.removePotionEffect(PotionEffectType.SLOW);
-            }
 
+                player.removePotionEffect(PotionEffectType.SLOW);
+
+            }
         }
     }
 }

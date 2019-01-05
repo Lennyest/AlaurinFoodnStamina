@@ -5,6 +5,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 public class AlaurinItemConsumptionEvent implements Listener {
 
@@ -85,6 +87,11 @@ public class AlaurinItemConsumptionEvent implements Listener {
                 break;
             case RABBIT_STEW:
                 player.setFoodLevel(player.getFoodLevel() + (int) AlaurinFoodnStamina.configCFG.get("Consumables.RabbitStew"));
+                break;
+            case MILK_BUCKET:
+                if (player.hasPotionEffect(PotionEffectType.SLOW)) {
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 2));
+                }
                 break;
         }
 

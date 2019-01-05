@@ -2,6 +2,7 @@ package alaurinfoodnstamina.alaurinfoodnstamina;
 
 import alaurinfoodnstamina.alaurinfoodnstamina.Events.AlaurinItemConsumptionEvent;
 import alaurinfoodnstamina.alaurinfoodnstamina.Events.AlaurinPlayerMoveEvent;
+import lombok.Getter;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -16,6 +17,7 @@ public final class AlaurinFoodnStamina extends JavaPlugin {
     public static FileConfiguration configCFG = new YamlConfiguration();
     //Ususally don't use static here, bad habit.
     //Make the instance
+    @Getter
     private static AlaurinFoodnStamina instance;
 
 
